@@ -1,4 +1,6 @@
-using HogwartsHouses.DAL;
+using HogwartsHouses.Data.DAL.Repository;
+using HogwartsHouses.Data.DAL.Sampler;
+using HogwartsHouses.Data.Services;
 using HogwartsHouses.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,8 +23,10 @@ namespace HogwartsHouses
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IRepository<Room>>(x => new RoomSampledRepository());
-            services.AddSingleton<IRoomService>(x => new RoomService(x.GetRequiredService<IRepository<Room>>()));
+            services.AddSingleton<RoomSampler>();
+            services.AddTransient<IRepository<Room>, RoomRepository>();
+            services.AddTransient<IRepository<Student>, StudentRepository>();
+            services.AddTransient<IRoomService, RoomService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
